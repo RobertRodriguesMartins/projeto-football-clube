@@ -53,10 +53,13 @@
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
+    "chai-as-promised": "^7.1.1",
     "cors": "2.8.5",
     "dotenv": "10.0.0",
     "express": "4.17.1",
+    "express-async-errors": "^3.1.1",
     "jest": "27.4.3",
+    "joi": "^17.6.0",
     "jsonwebtoken": "8.5.1",
     "mysql2": "2.3.3",
     "sequelize": "6.9.0"
