@@ -1,4 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
+import { Token } from '../middlewares';
+import runSchema from '../errors/utils/runSchema';
 import UserService from '../service/userService';
 
 class UserController {
@@ -13,11 +15,17 @@ class UserController {
   }
 
   static async login(
-    _req: Request,
+    req: Request,
     res: Response,
     _next: NextFunction,
   ): Promise<Response<string>> {
-    return res.status(200);
+    const userRepresentation = await runSchema('login', { ...req.body });
+
+    const user = await UserService.login(userRepresentation);
+    const { password, ...userWithoutPassword } = user;
+    const token = await Token.generateToken(userWithoutPassword);
+
+    return res.status(200).json({ token });
   }
 }
 
