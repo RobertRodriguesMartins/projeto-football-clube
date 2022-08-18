@@ -4,9 +4,7 @@ WORKDIR /app-backend
 
 COPY . .
 
-RUN npm install
-
-RUN npm run build
+RUN ["sh", "-c", "npm install && npm run build"]
 
 EXPOSE 3001
 
