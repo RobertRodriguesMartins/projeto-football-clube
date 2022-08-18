@@ -1,5 +1,4 @@
-const { QueryInterface } = require('sequelize');
-const { teamsAttributes: attributes } = require('./tableAttributes');
+const { QueryInterface, DataTypes } = require('sequelize');
 
 module.exports = {
   /**
@@ -7,7 +6,16 @@ module.exports = {
    */
   up: async (queryInterface) => {
     return queryInterface.createTable('teams', {
-      ...attributes,
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      teamName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: 'team_name',
+      },
     });
   },
 
