@@ -1,3 +1,6 @@
-import IUser from './User';
+import { IUser, ILogin } from './User';
 
-export default IUser;
+export {
+  IUser,
+  ILogin,
+};
