@@ -6,4 +6,12 @@ interface IUser {
   role: string
 }
 
-export default IUser;
+interface ILogin {
+  email: string
+  password: string
+}
+
+export {
+  ILogin,
+  IUser,
+};
