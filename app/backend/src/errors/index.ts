@@ -1,11 +1,6 @@
 import InvalidToken from './InvalidToken';
 import TokenNotFound from './TokenNotFound';
 import NotFound from './NotFound';
-import BadRequest from './BadRequest';
+import InvalidLogin from './InvalidLogin';
 
-export {
-  InvalidToken,
-  TokenNotFound,
-  NotFound,
-  BadRequest,
-};
+export { InvalidToken, TokenNotFound, NotFound, InvalidLogin };
