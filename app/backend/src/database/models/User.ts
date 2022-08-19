@@ -2,7 +2,13 @@ import { Model } from 'sequelize';
 import { userAttributes } from './tableAttributes';
 import db from '.';
 
-class User extends Model {}
+class User extends Model {
+  id!: number;
+  username!: string;
+  password!: string;
+  email!: string;
+  role!: string;
+}
 
 User.init(
   {
