@@ -1,7 +1,7 @@
 import { compare } from 'bcryptjs';
 import User from '../database/models/User';
-import IUser from '../database/models/interfaces';
-import { NotFound, BadRequest } from '../errors';
+import { ILogin, IUser } from '../database/models/interfaces';
+import { InvalidLogin } from '../errors';
 
 class UserService {
   static async findAll(): Promise<User[]> {
@@ -12,19 +12,19 @@ class UserService {
     return rawResponse;
   }
 
-  static async login(user: IUser): Promise<IUser> {
-    const rawResponse = await User.findOne({
+  static async login(user: ILogin): Promise<IUser> {
+    const rawResponse = (await User.findOne({
       raw: true,
       where: {
         email: user.email,
       },
-    }) as IUser | null;
+    })) as IUser | null;
 
-    if (!rawResponse) throw new NotFound('User');
+    if (!rawResponse) throw new InvalidLogin();
 
     const valid = await compare(user.password, rawResponse.password);
 
-    if (!valid) throw new BadRequest();
+    if (!valid) throw new InvalidLogin();
 
     return rawResponse;
   }
