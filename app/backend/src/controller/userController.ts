@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
+import UserService from '../service/userService';
 import { Token } from '../middlewares';
 import runSchema from '../errors/utils/runSchema';
-import UserService from '../service/userService';
 
 class UserController {
   static async findAll(
@@ -19,7 +19,8 @@ class UserController {
     res: Response,
     _next: NextFunction,
   ): Promise<Response<string>> {
-    const userRepresentation = await runSchema('login', { ...req.body });
+    const fields = await runSchema('loginFields', { ...req.body });
+    const userRepresentation = await runSchema('login', fields);
 
     const user = await UserService.login(userRepresentation);
     const { password, ...userWithoutPassword } = user;
