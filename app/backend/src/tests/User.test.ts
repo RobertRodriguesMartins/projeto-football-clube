@@ -1,5 +1,6 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import * as Jwt from 'jsonwebtoken';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
@@ -13,6 +14,7 @@ const { expect } = chai;
 
 describe('database/models/User', () => {
   let chaiHttpResponse: Response;
+  let fakeToken: string;
 
   beforeEach(sinon.restore);
 
@@ -34,6 +36,18 @@ describe('database/models/User', () => {
         .request(app)
         .post('/login')
         .send({ email: 'mm' });
+
+      expect(chaiHttpResponse.clientError).to.be.true;
+      expect(chaiHttpResponse.status).to.be.equals(400);
+      expect(chaiHttpResponse.body.message).to.be.equals(
+        'All fields must be filled'
+      );
+    });
+    it('should throw an error when request have email or password field empty', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({ email: 'mm', password: '' });
 
       expect(chaiHttpResponse.clientError).to.be.true;
       expect(chaiHttpResponse.status).to.be.equals(400);
@@ -71,9 +85,35 @@ describe('database/models/User', () => {
         .request(app)
         .post('/login')
         .send({ email: 'testemail@gmail.com', password: 'teste123' });
-      
-        expect(chaiHttpResponse.status).to.be.equals(200);
-        expect(chaiHttpResponse.body.token).to.exist
+      fakeToken = chaiHttpResponse.body.token;
+      expect(chaiHttpResponse.status).to.be.equals(200);
+      expect(chaiHttpResponse.body.token).to.exist;
+    });
+  });
+
+  describe('/login/validate', () => {
+    it('should throw if a token is not provided', async () => {
+      chaiHttpResponse = await chai.request(app).get('/login/validate');
+
+      expect(chaiHttpResponse.status).to.be.equals(400);
+      expect(chaiHttpResponse.body.message).to.be.equals('Token not found');
+    });
+    it('should throw if a token is malformed', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set({ authorization: 'invalidtoken' });
+
+      expect(chaiHttpResponse.status).to.be.equals(500);
+      expect(chaiHttpResponse.body.message).to.be.equals('jwt malformed');
+    });
+    it('should return status 200 and role object if a token is valid', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set({ authorization: fakeToken });
+      expect(chaiHttpResponse.status).to.be.equals(200);
+      expect(chaiHttpResponse.body).to.contains({ role: 'cool' });
     });
   });
 });
