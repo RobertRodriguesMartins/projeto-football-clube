@@ -25,7 +25,7 @@ class Token {
 
     if (!valid) throw new InvalidToken();
 
-    req.body.user = valid;
+    req.body = { ...req.body, user: valid };
     next();
   }
 }
