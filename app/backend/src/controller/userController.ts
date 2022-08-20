@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import UserService from '../service/userService';
 import { Token } from '../middlewares';
 import runSchema from '../errors/utils/runSchema';
+import { IUser } from '../database/models/interfaces';
 
 class UserController {
   static async findAll(
@@ -27,6 +28,15 @@ class UserController {
     const token = await Token.generateToken(userWithoutPassword);
 
     return res.status(200).json({ token });
+  }
+
+  static async validate(
+    req: Request,
+    res: Response,
+    _next: NextFunction,
+  ): Promise<Response<string>> {
+    const user: IUser = req.body.user as IUser;
+    return res.status(200).json({ role: user.role });
   }
 }
 
