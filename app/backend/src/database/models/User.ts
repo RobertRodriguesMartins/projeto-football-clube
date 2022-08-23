@@ -1,6 +1,6 @@
 import { Model } from 'sequelize';
 import { userAttributes } from './tableAttributes';
-import db from '.';
+import db from './db';
 
 class User extends Model {
   id!: number;
