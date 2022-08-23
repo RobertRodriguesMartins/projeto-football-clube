@@ -1,10 +1,9 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import * as Jwt from 'jsonwebtoken';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-import User from '../database/models/User';
+import {User} from '../database/models';
 import { userMock } from './mocks/User';
 
 import { Response } from 'superagent';
