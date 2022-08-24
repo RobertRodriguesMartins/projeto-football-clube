@@ -25,7 +25,8 @@ class MatchController {
     res: Response,
     _next: NextFunction,
   ): Promise<Response<string>> {
-    const newMatch = await runSchema('matchSave', { ...req.body });
+    const { user, ...bodyWithoutUser } = req.body;
+    const newMatch = await runSchema('matchSave', bodyWithoutUser);
     await teamService.findMatchTeamsById(newMatch);
     const response = await matchService.save(newMatch);
 
