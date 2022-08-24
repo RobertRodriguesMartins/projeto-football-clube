@@ -2,11 +2,7 @@ import User from './User';
 import Match from './Match';
 import Team from './Team';
 
-//team one to many with Matches
-//match association
-Match.hasMany(Team, {
-  foreignKey: 'id',
-});
-
+Match.belongsTo(Team, { as: 'teamHome', foreignKey: 'homeTeam' })
+Match.belongsTo(Team, { as: 'teamAway', foreignKey: 'awayTeam' })
 
 export { User, Match, Team };
