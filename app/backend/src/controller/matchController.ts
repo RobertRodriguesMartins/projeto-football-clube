@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import teamService from '../service/teamService';
 import runSchema from '../errors/utils/runSchema';
 import matchService from '../service/matchService';
+import { DuplicatedMatchTeam } from '../errors';
 
 class MatchController {
   static async findAll(
@@ -27,10 +28,24 @@ class MatchController {
   ): Promise<Response<string>> {
     const { user, ...bodyWithoutUser } = req.body;
     const newMatch = await runSchema('matchSave', bodyWithoutUser);
-    await teamService.findMatchTeamsById(newMatch);
+    const teamsId: number[] = await teamService.findMatchTeamsById(newMatch);
+    if (teamsId[0] === teamsId[1]) throw new DuplicatedMatchTeam();
     const response = await matchService.save(newMatch);
 
     return res.status(201).json(response);
+  }
+
+  static async finish(
+    req: Request,
+    res: Response,
+    _next: NextFunction,
+  ): Promise<Response<string>> {
+    const match: { id: number } = await runSchema('matchFinish', {
+      ...req.params,
+    });
+    await matchService.finish(match.id);
+
+    return res.status(200).json({ message: 'Finished' });
   }
 }
 

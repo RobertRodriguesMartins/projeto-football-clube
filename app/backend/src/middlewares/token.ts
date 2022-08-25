@@ -21,9 +21,12 @@ class Token {
 
     if (!token) throw new TokenNotFound();
 
-    const valid = Jwt.verify(token, Token.secret);
-
-    if (!valid) throw new InvalidToken();
+    let valid;
+    try {
+      valid = Jwt.verify(token, Token.secret);
+    } catch (e) {
+      throw new InvalidToken();
+    }
 
     req.body = { ...req.body, user: valid };
     next();

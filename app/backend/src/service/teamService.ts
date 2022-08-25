@@ -1,7 +1,7 @@
 import { Model } from 'sequelize';
 import Team from '../database/models/Team';
 import { IMatch, ITeam } from '../database/models/interfaces';
-import { NotFound } from '../errors';
+import { InvalidTeam, NotFound } from '../errors';
 
 class TeamService {
   static async findAll(): Promise<ITeam[]> {
@@ -14,7 +14,7 @@ class TeamService {
 
   static async findMatchTeamsById(
     matchTeams: Pick<IMatch, 'homeTeam' | 'awayTeam'>,
-  ): Promise<void> {
+  ): Promise<number[]> {
     const teamsId: number[] = [matchTeams.homeTeam, matchTeams.awayTeam];
     const teamsData: Promise<Model<Team> | null>[] = [];
     teamsId.forEach((teamId) => {
@@ -28,7 +28,8 @@ class TeamService {
     });
 
     const response = await Promise.all(teamsData);
-    if (response.includes(null)) throw new NotFound('team');
+    if (response.includes(null)) throw new InvalidTeam();
+    return teamsId;
   }
 
   static async byId(teamId: number): Promise<ITeam> {

@@ -11,6 +11,8 @@ const expectedErrors: ExpectedErrors[] = [
   { name: 'notFound', code: 404 },
   { name: 'tokenNotFound', code: 400 },
   { name: 'invalidToken', code: 401 },
+  { name: 'invalidTeam', code: 404 },
+  { name: 'duplicatedMatchTeam', code: 401 },
 ];
 
 const errorMiddleware: ErrorRequestHandler = (err: Error, _req, res, _next) => {
@@ -18,7 +20,6 @@ const errorMiddleware: ErrorRequestHandler = (err: Error, _req, res, _next) => {
   const expectedError: ExpectedErrors | undefined = expectedErrors.find(
     (expectedErr) => expectedErr.name.toLowerCase() === errorName,
   );
-
   if (!expectedError) {
     return res.status(500).json({ message: err.message });
   }

@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as cors from 'cors';
 import 'express-async-errors';
 import { errorMiddleware } from './middlewares';
 import { teamRouter, userRouter, matchRouter } from './routes';
@@ -8,7 +9,6 @@ class App {
 
   constructor() {
     this.app = express();
-
     this.config();
 
     // Não remover essa rota
@@ -28,6 +28,7 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
+    this.app.use(cors());
     this.app.use('/login', userRouter);
     this.app.use('/teams', teamRouter);
     this.app.use('/matches', matchRouter);

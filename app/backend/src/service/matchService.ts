@@ -33,10 +33,21 @@ class MatchService {
       awayTeam: newMatch.awayTeam,
       homeTeamGoals: newMatch.homeTeamGoals,
       awayTeamGoals: newMatch.awayTeamGoals,
-      inProgress: true,
+      inProgress: 1,
     });
 
     return rawResponse as IMatch;
+  }
+
+  static async finish(matchId: number): Promise<void> {
+    await Match.update(
+      { inProgress: 0 },
+      {
+        where: {
+          id: matchId,
+        },
+      },
+    );
   }
 }
 

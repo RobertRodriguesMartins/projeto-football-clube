@@ -2,7 +2,7 @@ class InvalidToken extends Error {
   constructor() {
     super();
 
-    this.message = 'Invalid token';
+    this.message = 'Token must be a valid token';
     this.name = 'InvalidToken';
   }
 }
