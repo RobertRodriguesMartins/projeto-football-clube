@@ -14,6 +14,10 @@ const matchSchema: Record<string, Joi.ObjectSchema> = {
   matchFinish: Joi.object({
     id: Joi.number().min(1).required(),
   }).required(),
+  matchUpdate: Joi.object({
+    homeTeamGoals: Joi.number().required(),
+    awayTeamGoals: Joi.number().required(),
+  }).required(),
 };
 
 export default matchSchema;

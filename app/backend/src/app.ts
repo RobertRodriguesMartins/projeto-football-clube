@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import 'express-async-errors';
 import { errorMiddleware } from './middlewares';
-import { teamRouter, userRouter, matchRouter } from './routes';
+import { teamRouter, userRouter, matchRouter, boardRouter } from './routes';
 
 class App {
   public app: express.Express;
@@ -32,6 +32,7 @@ class App {
     this.app.use('/login', userRouter);
     this.app.use('/teams', teamRouter);
     this.app.use('/matches', matchRouter);
+    this.app.use('/leaderboard', boardRouter);
     this.app.use(errorMiddleware);
   }
 

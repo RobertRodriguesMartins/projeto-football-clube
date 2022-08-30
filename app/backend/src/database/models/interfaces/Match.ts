@@ -7,4 +7,11 @@ interface IMatch {
   inProgress: number | boolean;
 }
 
+type IMatchAssociation = { [k: string]: string };
+
+export interface IMatchWithAssociations extends IMatch {
+  teamHome: IMatchAssociation;
+  teamAway: IMatchAssociation;
+}
+
 export default IMatch;

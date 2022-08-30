@@ -1,3 +1,4 @@
+import { NotFound } from '../errors';
 import { Match } from '../database/models';
 import { IMatch } from '../database/models/interfaces';
 
@@ -11,6 +12,17 @@ class MatchService {
     });
 
     return rawResponse as IMatch[];
+  }
+
+  static async findOne(matchId: number): Promise<IMatch> {
+    const rawResponse = await Match.findOne({
+      where: {
+        id: matchId,
+      },
+    });
+
+    if (!rawResponse) throw new NotFound('Match');
+    return rawResponse as IMatch;
   }
 
   static async findByQuery(queryParamValue: boolean): Promise<IMatch[]> {
@@ -48,6 +60,17 @@ class MatchService {
         },
       },
     );
+  }
+
+  static async update(
+    newMatchScore: Pick<IMatch, 'awayTeamGoals' | 'homeTeamGoals'>,
+    matchId: number,
+  ): Promise<void> {
+    await Match.update(newMatchScore, {
+      where: {
+        id: matchId,
+      },
+    });
   }
 }
 

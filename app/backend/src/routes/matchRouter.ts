@@ -7,6 +7,7 @@ const matchRouter = Router();
 matchRouter
   .get('/', matchController.findAll)
   .patch('/:id/finish', matchController.finish)
+  .patch('/:id', matchController.update)
   .use(Token.validateToken)
   .post('/', matchController.save);
 
